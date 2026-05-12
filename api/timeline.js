@@ -11,14 +11,12 @@ export default function handler(req, res) {
     return res.status(200).end();
   }
 
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "POST専用です" });
+  if (req.method !== "GET") {
+    return res.status(405).json({ error: "GET専用です" });
   }
 
-  const body = JSON.parse(req.body);
-
-  res.status(200).json({
-    message: "投稿を受け付けました",
-    data: body
-  });
+  res.status(200).json([
+    { id: 1, text: "こんにちは！これはダミーTLです" },
+    { id: 2, text: "Vercel API から取得しています" }
+  ]);
 }
