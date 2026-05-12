@@ -4,7 +4,7 @@ export const config = {
 
 export default function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
@@ -17,8 +17,11 @@ export default function handler(req, res) {
 
   const body = JSON.parse(req.body);
 
+  // 本当はここで DB に保存する
+  console.log("投稿:", body.text);
+
   res.status(200).json({
-    message: "投稿を受け付けました",
-    data: body
+    ok: true,
+    received: body.text
   });
 }
