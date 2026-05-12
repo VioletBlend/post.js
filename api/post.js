@@ -1,5 +1,9 @@
 export const config = { runtime: "nodejs" };
 
+let posts = [
+  { id: 1, text: "最初の投稿です！" }
+];
+
 export default function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -10,8 +14,12 @@ export default function handler(req, res) {
 
   const body = JSON.parse(req.body);
 
-  res.status(200).json({
-    ok: true,
-    received: body.text
-  });
+  const newPost = {
+    id: Date.now(),
+    text: body.text
+  };
+
+  posts.unshift(newPost);
+
+  res.status(200).json({ ok: true, post: newPost });
 }
