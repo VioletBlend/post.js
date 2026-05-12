@@ -1,5 +1,3 @@
-import { kv } from "@vercel/kv";
-
 export const config = { runtime: "nodejs" };
 
 export default async function handler(req, res) {
@@ -10,22 +8,20 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.method !== "POST") return res.status(405).json({ error: "POST専用です" });
 
-  const body = JSON.parse(req.body);
+  let body;
+
+  try {
+    // Node.js runtime では req.body は文字列
+    body = JSON.parse(req.body);
+  } catch (e) {
+    console.error("JSON parse error:", e);
+    return res.status(400).json({ error: "Invalid JSON" });
+  }
 
   const newPost = {
     id: Date.now(),
-    text: body.text,
-    time: new Date().toISOString()
+    text: body.text
   };
-
-  // 既存の投稿を取得
-  const posts = (await kv.get("posts")) || [];
-
-  // 新しい投稿を先頭に追加
-  posts.unshift(newPost);
-
-  // 保存
-  await kv.set("posts", posts);
 
   res.status(200).json({ ok: true, post: newPost });
 }
