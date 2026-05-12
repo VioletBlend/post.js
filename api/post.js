@@ -18,6 +18,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Invalid JSON" });
   }
 
+  if (!body.text || typeof body.text !== "string") {
+    return res.status(400).json({ error: "text がありません" });
+  }
+
   const newPost = {
     id: Date.now(),
     text: body.text
