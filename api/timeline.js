@@ -1,6 +1,15 @@
 export default function handler(req, res) {
+  // ★ CORS 対応（Chrome拡張を許可）
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   res.status(200).json([
     { id: 1, text: "こんにちは！これはダミーTLです" },
-    { id: 2, text: "Chrome拡張機能から取得しています" }
+    { id: 2, text: "Vercel API から取得しています" }
   ]);
 }
